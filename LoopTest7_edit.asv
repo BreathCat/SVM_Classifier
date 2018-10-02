@@ -85,11 +85,11 @@ for x=1:20
     %分离测试集和数据集  
 %   TrainData=zeros(126,25); 
  %   TrainLabel=zeros(126,1);             %训练标签
-    TrainData=zeros(60,3); %训练数据
+    TrainData=zeros(60,6); %训练数据
      TrainLabel=zeros(60,1);             %训练标签
     %TestData=zeros(32,25);
    %TestLabel=zeros(32,1);
-    TestData=zeros(10,3);
+    TestData=zeros(10,6);
       TestLabel=zeros(10,1);
     n=1;
     m=1;
@@ -102,16 +102,16 @@ for x=1:20
              TestLabel(n)=labelset(i);
           %  TestData(n+16,:)=dataset(i+79,:);
          %   TestLabel(n+16)=labelset(i+79);
-             TestData(n+5,:)=dataset(i+35,:);%32
-            TestLabel(n+5)=labelset(i+35);
+             TestData(n+5,:)=dataset(i+32,:);%32
+            TestLabel(n+5)=labelset(i+32);
             n=n+1;
         else
             TrainData(m,:)=dataset(i,:);
             TrainLabel(m)=labelset(i);
          %    TrainData(m+63,:)=dataset(i+79,:);
         %     TrainLabel(m+63)=labelset(i+79);
-            TrainData(m+30,:)=dataset(i+35,:);%32
-            TrainLabel(m+30)=labelset(i+35); %减去5个
+            TrainData(m+27,:)=dataset(i+32,:);%32
+            TrainLabel(m+27)=labelset(i+32);
             m=m+1;
         end
     end
