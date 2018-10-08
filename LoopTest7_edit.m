@@ -6,7 +6,7 @@ Single_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\Ori_P-
 t1 = dir(Double_folder);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders1 = {t1.name};
 mm=0;
-for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开始
+for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是特殊符号，所以iis从3开始
       if subfolders1{iis}==0
            continue
       end
@@ -14,17 +14,12 @@ for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开
       Double_data=importdata(pathname1);               %第iis个文件
       [m,n]=size(Double_data);
       Double_data_ave=mean(Double_data,1) ;      %第iis个文件每一列平均成一列
-%       for i=1:m
-%             Double_feature_i(i,1)=Double_data(i,3);
-%           Double_feature_i(i,2)=Double_data(i,4);
-%           Double_feature_i(i,3)=Double_data(i,7);
-%           
-%       end
+
         Double_feature_i=zeros(1,0);
         temp=(sum(Double_data));
-        Double_feature_i(1,1)=temp(1,15);%3
-        Double_feature_i(1,2)=temp(1,16);%4
-        Double_feature_i(1,3)=temp(1,17);%7
+        Double_feature_i(1,1)=temp(1,5);%3
+        Double_feature_i(1,2)=temp(1,9);%4
+        Double_feature_i(1,3)=temp(1,10);%7
 
         
       SUM1=sum(temp);
@@ -60,9 +55,9 @@ for iis=3:length(subfolders2)
 
         Single_feature_i=zeros(1,0);
         temp=(sum(Single_data));
-        Single_feature_i(1,1)=temp(1,15);%3
-        Single_feature_i(1,2)=temp(1,16);%4
-        Single_feature_i(1,3)=temp(1,17);%7
+        Single_feature_i(1,1)=temp(1,5);%3
+        Single_feature_i(1,2)=temp(1,9);%4
+        Single_feature_i(1,3)=temp(1,10);%7
 
         
       SUM1=sum(temp);
@@ -87,13 +82,25 @@ AccuracyRate=zeros(20,1);
 maxnum=0;
 minnum=0;
 %for x=1:3
-  for x=1:3
-    maxnum=max(dataset(:,x));
-    minnum=min(dataset(:,x));  
+%   for x=1:3
+%     maxnum=max(dataset(:,x));
+%     minnum=min(dataset(:,x));  
+%     if maxnum>0
+%         dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
+%     end 
+%   end 
+for x=1:35
+    maxnum=max(dataset(x,:));
+    minnum=min(dataset(x,:));  
     if maxnum>0
-        dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
+        dataset(x,:)=(dataset(x,:)-minnum)/(maxnum-minnum);
     end 
-  end 
+end
+% plot(Single_feature);
+% hold on;
+% plot(sum(Double_feature));
+% legend('D');
+
 
   output=zeros(5,1);
 for p=1:5
@@ -123,7 +130,7 @@ for x=1:20
             TestLabel(n+5)=labelset(i+35);
             n=n+1;
         else
-            TrainData(m,:)=dataset(i,:);
+            TrainData(m,:)=dataset(i,:); 
             TrainLabel(m)=labelset(i);
          %    TrainData(m+63,:)=dataset(i+79,:);
         %     TrainLabel(m+63)=labelset(i+79);
@@ -172,10 +179,10 @@ disp(cmd);
 
     %测试分类
     [PredictLabel,accuracy]=svmpredict(TestLabel,TestData,model);
-    TN=0;             %%%%%%%%   single---single
-    FP=0;               %%%%%%%%   single---double
-    TP=0;                %%%%%%%%   DOUBLE---double
-    FN=0;                 %%%%%%%%   DOUBLE---SINGLE
+    TN=0;             %%%%%%%%   标签为0（single&Ori）---预测为0
+    FP=0;               %%%%%%%%   标签为0 ---预测为1（double&Henc）
+    TP=0;                %%%%%%%%   标签为1 ---预测为1
+    FN=0;                 %%%%%%%%   标签为1---预测为0
     for num=1:10
         
         if TestLabel(num)==0&&PredictLabel(num)==0
@@ -194,11 +201,9 @@ disp(cmd);
     TNR=TN/(TN+FP);    %%%%%%%%真阴性率
     TPR=TP/(TP+FN);     %%%%%%%%真阳性率
     AR=(TPR+TNR)/2;
-    AccuracyRate(x)=AR; 
+    AccuracyRate(x)=AR;    %%x循环到20，每次检测随机选10个视频作为测试序列，共选20次，为1次accuracy
     
 end
-
-output(p,1)=mean(AccuracyRate(:));
+output(p,1)=mean(AccuracyRate(:));  %%p=5,检测次数
 end
-% disp(output);
  plot(output);

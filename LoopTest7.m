@@ -1,32 +1,59 @@
-%%%%%%%%%%%%数据处理   求6种模式的概率为特征（6维）
-Double_folder = 'E:\35intra_pred_modes\1080p\intra_pre_modes\Double10M-70M\';
-Single_folder = 'E:\35intra_pred_modes\1080p\intra_pre_modes\Single70M\';
+%%%%%%%%%%%%数据处理   求3、4、7种P帧的PU划分模式的概率为特征（3维）
+Double_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\Henc_P_PUNum\';%Single是Ori，Double是Henc
+Single_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\Ori_P-PUNum\';
+
  %%%%%%   Double_featire
 t1 = dir(Double_folder);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders1 = {t1.name};
 mm=0;
-for iis=3:length(subfolders1)  
+for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开始
       if subfolders1{iis}==0
            continue
       end
-      pathname1 = [Double_folder subfolders1{iis}]; %%%%%    single
-      Double_data=importdata(pathname1);
+      pathname1 = [Double_folder subfolders1{iis}]; %%%%%   iis所有遍历的文件
+      Double_data=importdata(pathname1);               %第iis个文件
       [m,n]=size(Double_data);
-      Double_data_ave=mean(Double_data,1) %按列平均
-      for i=1:m
-            Double_feature_i(i,1)=Double_data(i,1);
-          Double_feature_i(i,2)=Double_data(i,2);
-          Double_feature_i(i,3)=Double_data(i,10);
-         Double_feature_i(i,4)=Double_data(i,11);
-         Double_feature_i(i,5)=Double_data(i,26);
-         Double_feature_i(i,6)=Double_data(i,27);
-      end
-      Double_feature_i_sum=sum(Double_feature_i);
-      SUM1=sum((sum(Double_data))')
-      Double_feature_prob=Double_feature_i_sum/SUM1;
+      Double_data_ave=mean(Double_data,1) ;      %第iis个文件每一列平均成一列
+%       for i=1:m
+%             Double_feature_i(i,1)=Double_data(i,3);
+%           Double_feature_i(i,2)=Double_data(i,4);
+%           Double_feature_i(i,3)=Double_data(i,7);
+%           
+%       end
+        Double_feature_i=zeros(1,0);
+        temp=(sum(Double_data));
+        Double_feature_i(1,1)=temp(1,1);%3
+        Double_feature_i(1,2)=temp(1,2);%4
+        Double_feature_i(1,3)=temp(1,3);%7
+        Double_feature_i(1,4)=temp(1,4);
+        Double_feature_i(1,5)=temp(1,5);
+        Double_feature_i(1,6)=temp(1,6);
+        Double_feature_i(1,7)=temp(1,7);
+        Double_feature_i(1,8)=temp(1,8);
+        Double_feature_i(1,9)=temp(1,9);
+        Double_feature_i(1,10)=temp(1,10);
+        Double_feature_i(1,11)=temp(1,11);
+        Double_feature_i(1,12)=temp(1,12);
+        Double_feature_i(1,13)=temp(1,13);
+        Double_feature_i(1,14)=temp(1,14);
+        Double_feature_i(1,15)=temp(1,15);
+        Double_feature_i(1,16)=temp(1,16);
+        Double_feature_i(1,17)=temp(1,17);
+        Double_feature_i(1,18)=temp(1,18);
+        Double_feature_i(1,19)=temp(1,19);
+        Double_feature_i(1,20)=temp(1,20);
+        Double_feature_i(1,21)=temp(1,21);
+        Double_feature_i(1,22)=temp(1,22);
+        Double_feature_i(1,23)=temp(1,23);
+        Double_feature_i(1,24)=temp(1,24);
+        Double_feature_i(1,25)=temp(1,25);
+        
+      SUM1=sum(temp);
+      Double_feature_prob= Double_feature_i/SUM1;
      mm=mm+1;
      Double_feature(mm,:)=Double_feature_prob;
 end   
+
  %%%%%%  Single_featire
  t2 = dir(Single_folder);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders2 = {t2.name};
@@ -38,24 +65,60 @@ for iis=3:length(subfolders2)
       pathname2 = [Single_folder subfolders2{iis}]; %%%%%    single
       Single_data=importdata(pathname2);
       [m,n]=size(Single_data);
-      Single_data_ave=mean(Single_data,1) %按列平均
-      for i=1:m
-         Single_feature_i(i,1)=Single_data(i,1);
-         Single_feature_i(i,2)=Single_data(i,2);
-         Single_feature_i(i,3)=Single_data(i,10);
-         Single_feature_i(i,4)=Single_data(i,11);
-         Single_feature_i(i,5)=Single_data(i,26);
-         Single_feature_i(i,6)=Single_data(i,27);
-      end
-      Single_feature_i_sum=sum(Single_feature_i);
-      SUM=sum((sum(Single_data))')
-      Single_feature_prob=Single_feature_i_sum/SUM;
+      Single_data_ave=mean(Single_data,1); %按列平均
+%       for i=1:m
+%          Single_feature_i(i,1)=Single_data(i,3);
+%          Single_feature_i(i,2)=Single_data(i,4);
+%          Single_feature_i(i,3)=Single_data(i,7);
+% 
+%       end
+% 
+%       Single_feature_i_sum=sum(Single_feature_i);
+%       SUM=sum((sum(Single_data)));
+%       Single_feature_prob=Single_feature_i_sum/SUM;
+%      mm=mm+1;
+%      Single_feature(mm,:)=Single_feature_prob;
+
+        Single_feature_i=zeros(1,25);
+        Single_feature=zeros(35,25);
+
+        temp=(sum(Single_data));
+        Single_feature_i(1,1)=temp(1,1);%3
+        Single_feature_i(1,2)=temp(1,2);%4
+        Single_feature_i(1,3)=temp(1,3);%7
+        Single_feature_i(1,4)=temp(1,4);
+        Single_feature_i(1,5)=temp(1,5);
+        Single_feature_i(1,6)=temp(1,6);
+        Single_feature_i(1,7)=temp(1,7);
+        Single_feature_i(1,8)=temp(1,8);
+        Single_feature_i(1,9)=temp(1,9);
+        Single_feature_i(1,10)=temp(1,10);
+        Single_feature_i(1,11)=temp(1,11);
+        Single_feature_i(1,12)=temp(1,12);
+        Single_feature_i(1,13)=temp(1,13);
+        Single_feature_i(1,14)=temp(1,14);
+        Single_feature_i(1,15)=temp(1,15);
+        Single_feature_i(1,16)=temp(1,16);
+        Single_feature_i(1,17)=temp(1,17);
+        Single_feature_i(1,18)=temp(1,18);
+        Single_feature_i(1,19)=temp(1,19);
+        Single_feature_i(1,20)=temp(1,20);
+        Single_feature_i(1,21)=temp(1,21);
+        Single_feature_i(1,22)=temp(1,22);
+        Single_feature_i(1,23)=temp(1,23);
+        Single_feature_i(1,24)=temp(1,24);
+        Single_feature_i(1,25)=temp(1,25);
+      SUM1=sum(temp);
+      Single_feature_prob= Single_feature_i/SUM1;
      mm=mm+1;
      Single_feature(mm,:)=Single_feature_prob;
+     
 end   
-%%%%%  CIF   前43个是single_feature      后面43个是double_feature
-featuree(1:32,:)=Single_feature;
-featuree(33:64,:)=Double_feature;
+
+
+%%%%%  CIF   前35个是single_feature      后面35个是double_feature
+featuree(1:35,:)=Single_feature;
+featuree(36:70,:)=Double_feature;
 
 disp('  featuree finished!!!!');
 
@@ -67,32 +130,39 @@ AccuracyRate=zeros(20,1);
 maxnum=0;
 minnum=0;
 %for x=1:3
-  for x=1:6
-    maxnum=max(dataset(:,x));
-    minnum=min(dataset(:,x));  
+%   for x=1:25
+%     maxnum=max(dataset(:,x));
+%     minnum=min(dataset(:,x));  
+%     if maxnum>0
+%         dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
+%     end 
+%   end 
+for x=1:35
+    maxnum=max(dataset(x,:));
+    minnum=min(dataset(x,:));  
     if maxnum>0
-        dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
+        dataset(x,:)=(dataset(x,:)-minnum)/(maxnum-minnum);
     end 
-  end 
+end 
 
-  output=zeros(5,1)
+
+  output=zeros(5,1);
 for p=1:5
 for x=1:20
     %  testNum=randperm(79,16); 
-   testNum=randperm(32,5);   %%%%%     36个训练，7个测试   ，共43个
+   testNum=randperm(35,5);   %%%%%     30个训练，5个测试   ，共35个
     %分离测试集和数据集  
-%   TrainData=zeros(126,25); 
- %   TrainLabel=zeros(126,1);             %训练标签
-    TrainData=zeros(54,6); %训练数据
-     TrainLabel=zeros(54,1);             %训练标签
-    %TestData=zeros(32,25);
-   %TestLabel=zeros(32,1);
-    TestData=zeros(10,6);
-      TestLabel=zeros(10,1);
+
+    TrainData=zeros(60,25);      %训练数据
+     TrainLabel=zeros(60,1);    %训练标签
+
+     
+    TestData=zeros(10,25);       %测试数据
+      TestLabel=zeros(10,1);    %测试标签
     n=1;
     m=1;
-  %   for i=1:79
-    for i=1:32
+
+    for i=1:35
         %判断是否为选定的测试数据
      %   if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5) ||i==testNum(6) ||i==testNum(7)||i==testNum(8)||i==testNum(9)||i==testNum(10)||i==testNum(11)||i==testNum(12)||i==testNum(13)||i==testNum(14)||i==testNum(15)||i==testNum(16)
         if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5)  
@@ -100,16 +170,16 @@ for x=1:20
              TestLabel(n)=labelset(i);
           %  TestData(n+16,:)=dataset(i+79,:);
          %   TestLabel(n+16)=labelset(i+79);
-             TestData(n+5,:)=dataset(i+32,:);
-            TestLabel(n+5)=labelset(i+32);
+             TestData(n+5,:)=dataset(i+35,:);%32
+            TestLabel(n+5)=labelset(i+35);
             n=n+1;
         else
             TrainData(m,:)=dataset(i,:);
             TrainLabel(m)=labelset(i);
          %    TrainData(m+63,:)=dataset(i+79,:);
         %     TrainLabel(m+63)=labelset(i+79);
-            TrainData(m+27,:)=dataset(i+32,:);
-            TrainLabel(m+27)=labelset(i+32);
+            TrainData(m+30,:)=dataset(i+35,:);%32
+            TrainLabel(m+30)=labelset(i+35); %减去5个
             m=m+1;
         end
     end
@@ -181,5 +251,5 @@ end
 
 output(p,1)=mean(AccuracyRate(:));
 end
-disp(output);
- 
+% disp(output);
+ plot(output);
