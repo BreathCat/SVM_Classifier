@@ -77,7 +77,7 @@ for iis=3:length(P_PU_subfolders1)
          Double_feature_i_MODE(i,6)=Double_data_MODE(i,27);
       end
       Double_feature_i_sum_MODE=sum(Double_feature_i_MODE);
-      SUM1_MODE=sum((sum(Double_data_MODE))')
+      SUM1_MODE=sum((sum(Double_data_MODE))');
       Double_feature_prob_MODE=Double_feature_i_sum_MODE/SUM1_MODE;
       
       Double_feature_prob(1,1:4)=I_CU_Double_feature_prob;
@@ -86,6 +86,7 @@ for iis=3:length(P_PU_subfolders1)
       Double_feature_prob(1,16:19)=P_CU_Double_feature_prob;
       Double_feature_prob(1,20:44)=P_PU_Double_feature_prob;
      mm=mm+1;
+     Double_feature(mm,:);
      Double_feature(mm,:)=Double_feature_prob;
 end   
 

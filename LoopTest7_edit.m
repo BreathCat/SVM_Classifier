@@ -22,9 +22,9 @@ for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开
 %       end
         Double_feature_i=zeros(1,0);
         temp=(sum(Double_data));
-        Double_feature_i(1,1)=temp(1,15);%3
-        Double_feature_i(1,2)=temp(1,16);%4
-        Double_feature_i(1,3)=temp(1,17);%7
+        Double_feature_i(1,1)=temp(1,5);%3
+        Double_feature_i(1,2)=temp(1,9);%4
+        Double_feature_i(1,3)=temp(1,10);%7
 
         
       SUM1=sum(temp);
@@ -60,9 +60,9 @@ for iis=3:length(subfolders2)
 
         Single_feature_i=zeros(1,0);
         temp=(sum(Single_data));
-        Single_feature_i(1,1)=temp(1,15);%3
-        Single_feature_i(1,2)=temp(1,16);%4
-        Single_feature_i(1,3)=temp(1,17);%7
+        Single_feature_i(1,1)=temp(1,5);%3
+        Single_feature_i(1,2)=temp(1,9);%4
+        Single_feature_i(1,3)=temp(1,10);%7
 
         
       SUM1=sum(temp);
@@ -87,13 +87,25 @@ AccuracyRate=zeros(20,1);
 maxnum=0;
 minnum=0;
 %for x=1:3
-  for x=1:3
-    maxnum=max(dataset(:,x));
-    minnum=min(dataset(:,x));  
+%   for x=1:3
+%     maxnum=max(dataset(:,x));
+%     minnum=min(dataset(:,x));  
+%     if maxnum>0
+%         dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
+%     end 
+%   end 
+for x=1:35
+    maxnum=max(dataset(x,:));
+    minnum=min(dataset(x,:));  
     if maxnum>0
-        dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
+        dataset(x,:)=(dataset(x,:)-minnum)/(maxnum-minnum);
     end 
-  end 
+end
+% plot(Single_feature);
+% hold on;
+% plot(sum(Double_feature));
+% legend('D');
+
 
   output=zeros(5,1);
 for p=1:5

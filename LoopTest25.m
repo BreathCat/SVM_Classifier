@@ -1,6 +1,9 @@
 %%%%%%%%%%%%数据处理   求25种P帧内PU类型的直方图（8*8为单位）为特征（25维）
-Double_folder = 'E:\35intra_pred_modes\1080p\P_PUNum\Double8M-10M\';
-Single_folder = 'E:\35intra_pred_modes\1080p\P_PUNum\Single10M\';
+Double_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\txt_file\Henc_1_ducks_take_off_420_720p50.bin_P_PUNum.txt\';
+Single_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\txt_file\Ori_1_ducks_take_off_420_720p50_.bin_P_PUNum.txt\';
+
+% Double_folder = 'E:\35intra_pred_modes\1080p\P_PUNum\Double8M-10M\';
+% Single_folder = 'E:\35intra_pred_modes\1080p\P_PUNum\Single10M\';
  %%%%%%   Double_featire
 t1 = dir(Double_folder);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders1 = {t1.name};
@@ -38,9 +41,10 @@ for iis=3:length(subfolders1)
     Double_data(:,24)=Double_data(:,24)*16;
     Double_data(:,25)=Double_data(:,25)*16;
       Double_feature_i_sum=sum(Double_data);
-      SUM=75
+      SUM=80;
       Double_feature_prob=Double_feature_i_sum/SUM;
      mm=mm+1;
+     Double_feature = zeros(1,25);
      Double_feature(mm,:)=Double_feature_prob;
 end   
  %%%%%%  Single_featire
@@ -80,9 +84,10 @@ for iis=3:length(subfolders2)
     Single_data(:,24)=Single_data(:,24)*16;
     Single_data(:,25)=Single_data(:,25)*16;
       Single_feature_i_sum=sum(Single_data);
-      SUM=75
+      SUM=80;
       Single_feature_prob=Single_feature_i_sum/SUM;
      mm=mm+1;
+     Single_feature=zeros(1,25);
      Single_feature(mm,:)=Single_feature_prob;
 end   
 %%%%%  CIF   前36个是single_feature      后面36个是double_feature
