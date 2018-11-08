@@ -1,23 +1,41 @@
 
      
-
+clear all;
 %%%%%%%%%%%%数据处理   求3、4、7种P帧的PU划分模式的概率为特征（3维）
-Double_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\P-PUNUM\Ori_P-PUNum\ALL\';%Single是Ori，Double是Henc
-Single_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\P-PUNUM\Henc_P_PUNum\ALL\';
-half_num = 188; %Double_folder的个数
-half_test_num = 33; %从Double_folder中选取测试的个数 （分离测试集和训练集if还要改i的判断次数）
-Dimension = 25; %选取的维数 （接下来的Double_feature_i还要配套修改）
+Double_folder_1 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Enc-Henc\50M\';%Single是Ori，Double是Henc
+Double_folder_2 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Henc\50M\';%Single是Ori，Double是Henc
+
+Single_folder_1 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Enc_Ori\50M\';%Single是Ori，Double是Henc
+Single_folder_2 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Ori\50M\';%Single是Ori，Double是Henc
+
+
+half_num =30; %Double_folder的个数
+half_test_num = 5; %从Double_folder中选取测试的个数 （分离测试集和训练集if还要改i的判断次数）
+Dimension = 3; %选取的维数 （接下来的Double_feature_i还要配套修改）
 
  %%%%%%   Double_featire
-t1 = dir(Double_folder);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
+t1 = dir(Double_folder_1);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders1 = {t1.name};
+
+t2 = dir(Double_folder_2);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
+subfolders2 = {t2.name};
+
+
+
 mm=0;
 for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开始
       if subfolders1{iis}==0
            continue
       end
-      pathname1 = [Double_folder subfolders1{iis}]; %%%%%   iis所有遍历的文件
-      Double_data=importdata(pathname1);               %第iis个文件
+            pathname1 = [Double_folder_1 subfolders1{iis}]; %%%%%   iis所有遍历的文件
+      Double_data_1=importdata(pathname1);               %第iis个文件
+     
+      pathname2 = [Double_folder_2 subfolders2{iis}]; %%%%%   iis所有遍历的文件
+      Double_data_2=importdata(pathname2);               %第iis个文件
+
+      Double_data=abs(Double_data_1-Double_data_2)./(Double_data_2+1); %获得特征值，分母+1防止分母为0
+
+ 
       [m,n]=size(Double_data);
       Double_data_ave=mean(Double_data,1) ;      %第iis个文件每一列平均成一列 1080P因为txt文件不规范，所以乘以系数
 %       
@@ -26,28 +44,7 @@ for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开
          Double_feature_i(1,1)=temp(1,1);%3
         Double_feature_i(1,2)=temp(1,2);%4
         Double_feature_i(1,3)=temp(1,3);%7
-        Double_feature_i(1,4)=temp(1,4);
-        Double_feature_i(1,5)=temp(1,5);
-        Double_feature_i(1,6)=temp(1,6);
-        Double_feature_i(1,7)=temp(1,7);
-        Double_feature_i(1,8)=temp(1,8);
-        Double_feature_i(1,9)=temp(1,9);
-        Double_feature_i(1,10)=temp(1,10);
-        Double_feature_i(1,11)=temp(1,11);
-        Double_feature_i(1,12)=temp(1,12);
-        Double_feature_i(1,13)=temp(1,13);
-        Double_feature_i(1,14)=temp(1,14);
-        Double_feature_i(1,15)=temp(1,15);
-        Double_feature_i(1,16)=temp(1,16);
-        Double_feature_i(1,17)=temp(1,17);
-        Double_feature_i(1,18)=temp(1,18);
-        Double_feature_i(1,19)=temp(1,19);
-        Double_feature_i(1,20)=temp(1,20);
-        Double_feature_i(1,21)=temp(1,21);
-        Double_feature_i(1,22)=temp(1,22);
-        Double_feature_i(1,23)=temp(1,23);
-        Double_feature_i(1,24)=temp(1,24);
-        Double_feature_i(1,25)=temp(1,25);
+       
         
         
       SUM1=sum(temp);
@@ -57,31 +54,28 @@ for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开
 end   
 
  %%%%%%  Single_featire
- t2 = dir(Single_folder);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
-subfolders2 = {t2.name};
+ t3 = dir(Single_folder_1);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
+subfolders3 = {t3.name};
+
+ t4 = dir(Single_folder_2);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
+subfolders4 = {t4.name};
+
 mm=0;
-for iis=3:length(subfolders2)  
-      if subfolders2{iis}==0
+for iis=3:length(subfolders3)  
+      if subfolders3{iis}==0
            continue
       end
-      pathname2 = [Single_folder subfolders2{iis}]; %%%%%    single
-      Single_data=importdata(pathname2);
+      pathname3 = [Single_folder_1 subfolders3{iis}]; %%%%%    single
+      Single_data_3=importdata(pathname3);
+      
+       pathname4 = [Single_folder_2 subfolders4{iis}]; %%%%%    single
+      Single_data_4=importdata(pathname4);
+      
+      Single_data=abs(Single_data_3-Single_data_4)./(Single_data_4+1); %获得特征值，分母+1防止分母为0
+
       [m,n]=size(Single_data);
       Single_data_ave=mean(Single_data,1); %按列平均
               
-
-%       for i=1:m
-%          Single_feature_i(i,1)=Single_data(i,3);
-%          Single_feature_i(i,2)=Single_data(i,4);
-%          Single_feature_i(i,3)=Single_data(i,7);
-% 
-%       end
-% 
-%       Single_feature_i_sum=sum(Single_feature_i);
-%       SUM=sum((sum(Single_data)));
-%       Single_feature_prob=Single_feature_i_sum/SUM;
-%      mm=mm+1;
-%      Single_feature(mm,:)=Single_feature_prob;
 
         Single_feature_i=zeros(1,Dimension);
 
@@ -90,28 +84,7 @@ for iis=3:length(subfolders2)
         Single_feature_i(1,1)=temp(1,1);%3
         Single_feature_i(1,2)=temp(1,2);%4
         Single_feature_i(1,3)=temp(1,3);%7
-        Single_feature_i(1,4)=temp(1,4);
-        Single_feature_i(1,5)=temp(1,5);
-        Single_feature_i(1,6)=temp(1,6);
-        Single_feature_i(1,7)=temp(1,7);
-        Single_feature_i(1,8)=temp(1,8);
-        Single_feature_i(1,9)=temp(1,9);
-        Single_feature_i(1,10)=temp(1,10);
-        Single_feature_i(1,11)=temp(1,11);
-        Single_feature_i(1,12)=temp(1,12);
-        Single_feature_i(1,13)=temp(1,13);
-        Single_feature_i(1,14)=temp(1,14);
-        Single_feature_i(1,15)=temp(1,15);
-        Single_feature_i(1,16)=temp(1,16);
-        Single_feature_i(1,17)=temp(1,17);
-        Single_feature_i(1,18)=temp(1,18);
-        Single_feature_i(1,19)=temp(1,19);
-        Single_feature_i(1,20)=temp(1,20);
-        Single_feature_i(1,21)=temp(1,21);
-        Single_feature_i(1,22)=temp(1,22);
-        Single_feature_i(1,23)=temp(1,23);
-        Single_feature_i(1,24)=temp(1,24);
-        Single_feature_i(1,Dimension)=temp(1,Dimension);
+    
       SUM1=sum(temp);
       Single_feature_prob= Single_feature_i/SUM1;
      mm=mm+1;
@@ -133,23 +106,7 @@ AccuracyRate=zeros(20,1);
 %归一化
 maxnum=0;
 minnum=0;
-%for x=1:3
-%   for x=1:Dimension
-%     maxnum=max(dataset(:,x));
-%     minnum=min(dataset(:,x));  
-%     if maxnum>0
-%         dataset(:,x)=(dataset(:,x)-minnum)/(maxnum-minnum);
-%     end 
-%   end 
 
-%极限操作，试试注释 10.22
-% for x=1:32
-%     maxnum=max(dataset(x,:));
-%     minnum=min(dataset(x,:));  
-%     if maxnum>0
-%         dataset(x,:)=(dataset(x,:)-minnum)/(maxnum-minnum);
-%     end 
-% end 
 
 
   output=zeros(5,1);
@@ -170,8 +127,8 @@ for x=1:20
 
     for i=1:half_num
         %判断是否为选定的测试数据
-         if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5) ||i==testNum(6) ||i==testNum(7)||i==testNum(8)||i==testNum(9)||i==testNum(10)||i==testNum(11)||i==testNum(12)||i==testNum(13)||i==testNum(14)||i==testNum(15)||i==testNum(16)||i==testNum(17)||i==testNum(18)||i==testNum(19)||i==testNum(20)||i==testNum(21)||i==testNum(22)||i==testNum(23)||i==testNum(24)||i==testNum(25)||i==testNum(26)||i==testNum(27)||i==testNum(28)||i==testNum(29)||i==testNum(30)||i==testNum(31)||i==testNum(32)||i==testNum(33)
-%         if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5)  
+%          if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5) ||i==testNum(6) ||i==testNum(7)||i==testNum(8)||i==testNum(9)||i==testNum(10)||i==testNum(11)||i==testNum(12)||i==testNum(13)||i==testNum(14)||i==testNum(15)||i==testNum(16)||i==testNum(17)||i==testNum(18)||i==testNum(19)||i==testNum(20)||i==testNum(21)||i==testNum(22)||i==testNum(23)||i==testNum(24)||i==testNum(25)||i==testNum(26)||i==testNum(27)||i==testNum(28)||i==testNum(29)||i==testNum(30)||i==testNum(31)||i==testNum(32)||i==testNum(33)
+        if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5)  
             TestData(n,:)=dataset(i,:);
              TestLabel(n)=labelset(i);
           %  TestData(n+16,:)=dataset(i+79,:);

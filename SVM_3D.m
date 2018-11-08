@@ -1,9 +1,9 @@
 
 %%%%%%%%%%%%数据处理   求3、4、7种P帧的PU划分模式的概率为特征（3维）
-Double_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\P-PUNUM\Henc_P_PUNum\30M\';%Single是Ori，Double是Henc
-Single_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\P-PUNUM\Ori_P-PUNum\30M\';
-half_num = 30; %Double_folder的个数
-half_test_num = 5; %从Double_folder中选取测试的个数 （分离测试集和训练集if还要改i的判断次数）
+Double_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\P-PUNUM\Ori_P-PUNum\ALL\';%Single是Ori，Double是Henc
+Single_folder = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\P-PUNUM\Henc_P_PUNum\ALL\';
+half_num = 188; %Double_folder的个数
+half_test_num = 33; %从Double_folder中选取测试的个数 （分离测试集和训练集if还要改i的判断次数）
 Dimension = 3; %选取的维数 （接下来的Double_feature_i还要配套修改）
 
  %%%%%%   Double_featire
@@ -18,12 +18,7 @@ for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开
       Double_data=importdata(pathname1);               %第iis个文件
       [m,n]=size(Double_data);
       Double_data_ave=mean(Double_data,1) ;      %第iis个文件每一列平均成一列 1080P因为txt文件不规范，所以乘以系数
-%       for i=1:m
-%             Double_feature_i(i,1)=Double_data(i,3);
-%           Double_feature_i(i,2)=Double_data(i,4);
-%           Double_feature_i(i,3)=Double_data(i,7);
-%           
-%       end
+%       
         Double_feature_i=zeros(1,0);
         temp=(sum(Double_data));
         Double_feature_i(1,1)=temp(1,3);%3
@@ -128,8 +123,8 @@ for x=1:20
 
     for i=1:half_num
         %判断是否为选定的测试数据
-     %   if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5) ||i==testNum(6) ||i==testNum(7)||i==testNum(8)||i==testNum(9)||i==testNum(10)||i==testNum(11)||i==testNum(12)||i==testNum(13)||i==testNum(14)||i==testNum(15)||i==testNum(16)
-        if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5)  
+         if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5) ||i==testNum(6) ||i==testNum(7)||i==testNum(8)||i==testNum(9)||i==testNum(10)||i==testNum(11)||i==testNum(12)||i==testNum(13)||i==testNum(14)||i==testNum(15)||i==testNum(16)||i==testNum(17)||i==testNum(18)||i==testNum(19)||i==testNum(20)||i==testNum(21)||i==testNum(22)||i==testNum(23)||i==testNum(24)||i==testNum(25)||i==testNum(26)||i==testNum(27)||i==testNum(28)||i==testNum(29)||i==testNum(30)||i==testNum(31)||i==testNum(32)||i==testNum(33)
+%         if i==testNum(1) || i==testNum(2) || i==testNum(3) || i==testNum(4) || i==testNum(5)  
             TestData(n,:)=dataset(i,:);
              TestLabel(n)=labelset(i);
           %  TestData(n+16,:)=dataset(i+79,:);
@@ -191,7 +186,7 @@ disp(cmd);
     FP=0;               %%%%%%%%   single---double
     TP=0;                %%%%%%%%   DOUBLE---double
     FN=0;                 %%%%%%%%   DOUBLE---SINGLE
-    for num=1:10
+    for num=1:2*half_test_num
         
         if TestLabel(num)==0&&PredictLabel(num)==0
             TN=TN+1;
