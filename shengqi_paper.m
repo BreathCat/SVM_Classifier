@@ -4,13 +4,15 @@ clear all;
 %%%%%%%%%%%%数据处理   求3、4、7种P帧的PU划分模式的概率为特征（3维）
 Double_folder_1 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Enc-Henc\50M\';%Single是Ori，Double是Henc
 Double_folder_2 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Henc\50M\';%Single是Ori，Double是Henc
+Double_folder_0 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Enc-Henc\720P\';%Single是Ori，Double是Henc
 
 Single_folder_1 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Enc_Ori\50M\';%Single是Ori，Double是Henc
 Single_folder_2 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Ori\50M\';%Single是Ori，Double是Henc
+Single_folder_0 = 'C:\Users\45452\OneDrive - bjtu.edu.cn\HEVC\attack\libsvm\I-PUNUM\Enc_Ori\720p\';%Single是Ori，Double是Henc
 
 
-half_num =30; %Double_folder的个数
-half_test_num = 5; %从Double_folder中选取测试的个数 （分离测试集和训练集if还要改i的判断次数）
+half_num =92; %Double_folder的个数
+half_test_num = 1; %从Double_folder中选取测试的个数 （分离测试集和训练集if还要改i的判断次数）
 Dimension = 3; %选取的维数 （接下来的Double_feature_i还要配套修改）
 
  %%%%%%   Double_featire
@@ -20,7 +22,8 @@ subfolders1 = {t1.name};
 t2 = dir(Double_folder_2);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders2 = {t2.name};
 
-
+t0 = dir(Double_folder_0);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
+subfolders0 = {t0.name};
 
 mm=0;
 for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开始
@@ -33,8 +36,10 @@ for iis=3:length(subfolders1)   %因为subfolders1的第一列和第二列是..所以iis从3开
       pathname2 = [Double_folder_2 subfolders2{iis}]; %%%%%   iis所有遍历的文件
       Double_data_2=importdata(pathname2);               %第iis个文件
 
-      Double_data=abs(Double_data_1-Double_data_2)./(Double_data_2+1); %获得特征值，分母+1防止分母为0
+      pathname0 = [Double_folder_0 subfolders0{iis}]; %%%%%   iis所有遍历的文件
 
+%       Double_data=abs(Double_data_1-Double_data_2)./(Double_data_2+1); %获得特征值，分母+1防止分母为0 单独码率
+      Double_data=importdata(pathname0);
  
       [m,n]=size(Double_data);
       Double_data_ave=mean(Double_data,1) ;      %第iis个文件每一列平均成一列 1080P因为txt文件不规范，所以乘以系数
@@ -60,6 +65,9 @@ subfolders3 = {t3.name};
  t4 = dir(Single_folder_2);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
 subfolders4 = {t4.name};
 
+t5 = dir(Single_folder_0);% 先确定子文件夹 返回一个结构数组，包含了文件夹下的子文件夹和子文件的一些信息，第1个成员是文件名，第4个成员表示是否为文件夹。
+subfolders5 = {t5.name};
+
 mm=0;
 for iis=3:length(subfolders3)  
       if subfolders3{iis}==0
@@ -71,8 +79,11 @@ for iis=3:length(subfolders3)
        pathname4 = [Single_folder_2 subfolders4{iis}]; %%%%%    single
       Single_data_4=importdata(pathname4);
       
-      Single_data=abs(Single_data_3-Single_data_4)./(Single_data_4+1); %获得特征值，分母+1防止分母为0
+%       Single_data=abs(Single_data_3-Single_data_4)./(Single_data_4+1); %获得特征值，分母+1防止分母为0
 
+ pathname5 = [Single_folder_0 subfolders5{iis}]; %%%%%    single
+      Single_data=importdata(pathname5);
+      
       [m,n]=size(Single_data);
       Single_data_ave=mean(Single_data,1); %按列平均
               
